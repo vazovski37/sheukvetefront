@@ -8,7 +8,9 @@ import logo from "../../../../assets/images/logo.png";
 
 const TableDetailsPage = () => {
   const { id } = useParams(); 
+
   const isTableTaken = id === "1";
+
 
   const handleOrderStart = () => {
     alert(`Order started for Table ${id}`);
@@ -17,6 +19,11 @@ const TableDetailsPage = () => {
   const handleOrderFinish = () => {
     alert(`Order finished for Table ${id}`);
   };
+
+
+
+
+
 
   return (
     <div className="flex flex-col items-center h-screen bg-[#fdf4e3] p-6">
