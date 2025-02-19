@@ -1,24 +1,23 @@
 "use client";
 
-import SButton from "@/designComp/SButton/SButton";
-import SInput from "@/designComp/SInput/SInput";
-import React, { useState } from "react";
-import logo from "../../../assets/images/logo.png"; // Path to logo image
+import React from "react";
+import SForm from "@/designComp/SForm/SForm";
+import { useLogin } from "@/hooks/useLogin";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // Import useRouter
+import logo from "../../../assets/images/logo.png";
+
+interface LoginFormData {
+  username: string;
+  password: string;
+}
+
+const loginFields: { name: keyof LoginFormData; placeholder: string; type?: string }[] = [
+  { name: "username", placeholder: "სახელი" },
+  { name: "password", placeholder: "პაროლი", type: "password" },
+];
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const router = useRouter(); // Initialize useRouter
-
-  const handleLogin = () => {
-    if (username && password) {
-      router.push("/tables"); // Navigate to TablesPage
-    } else {
-      alert("Please fill in both fields!");
-    }
-  };
+  const { login, loading, error } = useLogin();
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-6 bg-[#fdf4e3]">
@@ -27,29 +26,21 @@ const LoginPage = () => {
         <Image src={logo} alt="Logo" width={200} height={80} />
       </div>
 
-      {/* Input fields and Button */}
-      <div className="w-full max-w-xs bg-white p-6 rounded-md border-2 border-yellow-400">
-        {/* Username Input */}
-        <div className="mb-4">
-          <SInput
-            placeholder="სახელი"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-        </div>
+      {/* Login Form */}
+      <SForm<LoginFormData>
+        title="სისტემაში შესვლა"
+        fields={loginFields}
+        onSubmit={login}
+        submitText={loading ? "იტვირთება..." : "შესვლა"}
+        loading={loading}
+      />
 
-        {/* Password Input */}
-        <div className="mb-6">
-          <SInput
-            placeholder="პაროლი"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        {/* Login Button */}
-        <SButton text="სისტემაში შესვლა" onClick={handleLogin} fullWidth />
-      </div>
+      {/* Error message */}
+      {error && (
+        <p className="text-red-500 text-sm mt-2 bg-red-100 p-2 rounded-md border border-red-400">
+          {error}
+        </p>
+      )}
     </div>
   );
 };
