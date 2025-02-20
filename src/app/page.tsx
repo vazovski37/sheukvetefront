@@ -4,7 +4,6 @@ import SButton from "@/designComp/SButton/SButton";
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
 import logo from "../assets/images/logo.png";
 import login from "../assets/images/login.png";
 

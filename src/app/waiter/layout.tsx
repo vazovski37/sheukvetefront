@@ -1,25 +1,51 @@
 "use client";
 
 import React from "react";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import logo from "@/assets/images/logo.png"; // Adjust the path as needed
+import logo from "@/assets/images/logo.png";
+import SButton from "@/designComp/SButton/SButton";
+import { useAuth } from "@/hooks/useAuth";
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  const router = useRouter(); 
+  const router = useRouter();
+  const { logout } = useAuth();
 
   return (
-    <div className="flex flex-col items-center justify-center w-full min-h-screen bg-[#fdf4e3] p-6 relative">
-      {/* Back Button and Logo in the same container */}
-      <div className="flex items-center justify-center w-full absolute top-4">
-        <span className="text-black cursor-pointer absolute left-4 text-lg" onClick={() => router.push("/")}>
-          &lt; გასვლა
+    <div className="flex flex-col items-center justify-center w-full bg-[#fdf4e3] px-6 relative">
+      {/* Header with Back Button, Logo, and Logout */}
+      <div className="flex justify-between items-center w-full py-2">
+        {/* Back Button */}
+        <span
+          className="text-black cursor-pointer text-lg"
+          onClick={() => router.back()}
+        >
+          &lt; უკან
         </span>
-        <Image src={logo} alt="SheKvete Logo" width={200} height={80} />
+
+        {/* Logo */}
+        <Image
+          src={logo}
+          alt="SheKvete Logo"
+          width={200}
+          height={80}
+          priority
+          unoptimized
+          className="cursor-pointer"
+          onClick={() => router.push("/admin")}
+        />
+
+        {/* Logout Button */}
+        <SButton 
+          text="გამოსვლა" 
+          onClick={logout} 
+          color="red" 
+          className="px-4 py-2 text-sm border border-red-600"
+        />
       </div>
 
       {/* Page Content */}
-      <div className="w-full max-w-5xl mt-20">{children}</div>
+      <div className="w-full">{children}</div>
     </div>
   );
 };

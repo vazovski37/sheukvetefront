@@ -2,7 +2,7 @@
 
 import React from "react";
 import SForm from "@/designComp/SForm/SForm";
-import { useLogin } from "@/hooks/useLogin";
+import { useAuth } from "@/hooks/useAuth";
 import Image from "next/image";
 import logo from "../../../assets/images/logo.png";
 
@@ -17,7 +17,7 @@ const loginFields: { name: keyof LoginFormData; placeholder: string; type?: stri
 ];
 
 const LoginPage = () => {
-  const { login, loading, error } = useLogin();
+  const { login, loading, error } = useAuth(); // ✅ Correct hook
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-6 bg-[#fdf4e3]">

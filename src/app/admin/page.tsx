@@ -6,16 +6,16 @@ import SButton from "@/designComp/SButton/SButton";
 
 // Define button data
 const buttonData = [
-  { text: "კატეგორიის დამატება", path: "/admin/category" },
-  { text: "კერძის დამატება", path: "/admin/product" },
-  { text: "ყველა კატეგორია", path: "/admin/categories" },
-  { text: "მიმტანის დამატება", path: "/admin/add-waiter" },
-  { text: "სასმლის დამატება", path: "/admin/warehouse" },
+  { text: "კატეგორიის დამატება", path: "/admin/category/add" }, // +
+  { text: "კერძის დამატება", path: "/admin/food/add-meal" }, // +
+  { text: "ყველა კატეგორია", path: "/admin/category/all" }, // +
+  { text: "მიმტანის დამატება", path: "/admin/add-waiter" }, // +
+  { text: "სასმლის დამატება", path: "/admin/food/add-drink" }, // +
   { text: "ყველა მიმტანი", path: "/admin/reviews" },
-  { text: "მაგიდის დამატება", path: "/admin/table" },
+  { text: "მაგიდის დამატება", path: "/admin/add-table" }, // +
   { text: "ფინანსები", path: "/admin/finance" },
-  { text: "ყველა მაგიდა", path: "/admin/orders" },
-  { text: "ყველა საჭმელი/სასმელი", path: "/admin/users" }
+  { text: "ყველა მაგიდა", path: "/admin/tables" }, // +
+  { text: "ყველა საჭმელი/სასმელი", path: "/admin/food/all" } // +
 ];
 
 const SheKveteAdminPage = () => {
