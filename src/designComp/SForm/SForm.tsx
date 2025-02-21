@@ -11,7 +11,7 @@ interface SFormProps<T> {
     defaultValue?: string | number;
   }[];
   onSubmit: (data: T) => Promise<void>;
-  onCancel?: () => void; // ✅ Cancel button support
+  onCancel?: () => void;
   submitText?: string;
   loading?: boolean;
 }
@@ -20,7 +20,7 @@ const SForm = <T extends Record<string, any>>({
   title,
   fields,
   onSubmit,
-  onCancel, // ✅ Added cancel button functionality
+  onCancel,
   submitText = "შენახვა",
   loading = false,
 }: SFormProps<T>) => {
@@ -31,16 +31,14 @@ const SForm = <T extends Record<string, any>>({
     }, {} as T)
   );
 
-  // ✅ Handle Input Change (with validation for price)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     
     let newValue: any = value;
 
-    // ✅ If the field is "price", enforce number validation
     if (name === "price") {
-      newValue = value.replace(/[^0-9.]/g, ""); // Allow only numbers and dots
-      if (newValue.split(".").length > 2) return; // Prevent multiple dots
+      newValue = value.replace(/[^0-9.]/g, ""); 
+      if (newValue.split(".").length > 2) return;
     }
 
     setFormData((prev) => ({ ...prev, [name]: newValue }));
@@ -48,7 +46,7 @@ const SForm = <T extends Record<string, any>>({
 
   const handleSubmit = async () => {
     if (loading) return;
-    // Convert price to a valid number before submission
+
     const finalData = { ...formData, price: parseFloat(formData.price) || 0 };
     await onSubmit(finalData);
   };
@@ -64,7 +62,7 @@ const SForm = <T extends Record<string, any>>({
               key={String(field.name)}
               name={String(field.name)}
               placeholder={field.placeholder}
-              type={field.name === "price" ? "text" : field.type || "text"} // ✅ Ensure price is text for validation
+              type={field.name === "price" ? "text" : field.type || "text"}
               value={formData[field.name] as string}
               onChange={handleChange}
             />
@@ -73,7 +71,7 @@ const SForm = <T extends Record<string, any>>({
 
         <div className="flex gap-2 mt-4">
           <SButton text={loading ? "იტვირთება..." : submitText} onClick={handleSubmit} fullWidth color="yellow" />
-          {onCancel && <SButton text="გაუქმება" onClick={onCancel} fullWidth color="red" />} {/* ✅ Cancel Button */}
+          {onCancel && <SButton text="გაუქმება" onClick={onCancel} fullWidth color="red" />} 
         </div>
       </div>
     </div>

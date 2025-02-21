@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
 import SForm from "@/designComp/SForm/SForm";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 import logo from "../../../assets/images/logo.png";
 
@@ -17,20 +18,32 @@ const loginFields: { name: keyof LoginFormData; placeholder: string; type?: stri
 ];
 
 const LoginPage = () => {
-  const { login, loading, error } = useAuth(); // ✅ Correct hook
+  const { login,auth, isAuthenticated, loading, error } = useAuth();
+  const router = useRouter();
+
+  // ✅ Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (auth.role == "ADMIN"){
+        router.push("/admin");
+      }else if (auth.role == "WAITER"){
+        router.push("/waiter");
+      }
+    }
+  }, [isAuthenticated, router]);
+
+  const handleLogin = async (formData: LoginFormData) => {
+    await login(formData);
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-screen p-6 bg-[#fdf4e3]">
-      {/* Logo */}
-      <div className="mb-10">
-        <Image src={logo} alt="Logo" width={200} height={80} />
-      </div>
 
       {/* Login Form */}
       <SForm<LoginFormData>
         title="სისტემაში შესვლა"
         fields={loginFields}
-        onSubmit={login}
+        onSubmit={handleLogin}
         submitText={loading ? "იტვირთება..." : "შესვლა"}
         loading={loading}
       />

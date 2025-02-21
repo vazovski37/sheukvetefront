@@ -10,6 +10,7 @@ export const config = {
     "/orders",
     "/settings",
     "/login",
+    "/"
   ],
 };
 
@@ -43,16 +44,13 @@ export async function middleware(request: NextRequest) {
     console.log("Unauthorized access to waiter area. Redirecting...");
     return NextResponse.redirect(new URL("/", request.url));
   }
-
-  // ❌ Prevent logged-in users from accessing `/login`
+ 
+  
   if (url.pathname === "/login") {
-    console.log("Logged-in user trying to access /login. Redirecting...");
     if (userRole === "ADMIN") {
       url.pathname = "/admin";
     } else if (userRole === "WAITER") {
       url.pathname = "/waiter";
-    } else {
-      url.pathname = "/";
     }
     return NextResponse.redirect(url);
   }

@@ -13,11 +13,6 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center gap-y-20 h-screen p-4 bg-[#fdf4e3]">
-      {/* Logo */}
-      <div>
-        <Image src={logo} alt="Logo" width={150} height={50} />
-      </div>
-
       {/* Login Illustration */}
       <div>
         <Image src={login} alt="Login Illustration" width={300} height={300} />

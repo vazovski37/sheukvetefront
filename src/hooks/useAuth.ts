@@ -9,22 +9,24 @@ export interface AuthState {
 }
 
 export const useAuth = () => {
-  const [auth, setAuth] = useState<AuthState>({ token: null, role: null });
+  const [auth, setAuth] = useState<AuthState>(() => {
+    const cookies = parseCookies();
+    return {
+      token: cookies.api_token || null,
+      role: (cookies.role as "ADMIN" | "WAITER") || null,
+    };
+  });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  // ✅ Load auth state from cookies on mount
-  useEffect(() => {
-    const cookies = parseCookies();
-    if (cookies.api_token && cookies.role) {
-      setAuth({ token: cookies.api_token, role: cookies.role as "ADMIN" | "WAITER" });
-    }
-  }, []);
+  // ✅ Compute isAuthenticated dynamically
+  const isAuthenticated = !!auth.token;
 
-  // ✅ Login function
+  // ✅ Login function (Triggers a re-render)
   const login = async (formData: { username: string; password: string }) => {
-    if (loading) return; // Prevent multiple requests
+    if (loading) return;
     setLoading(true);
     setError(null);
 
@@ -48,17 +50,11 @@ export const useAuth = () => {
         secure: process.env.NODE_ENV === "production",
       });
 
-      // ✅ Update auth state
+      // ✅ Update auth state and trigger re-render
       setAuth({ token: response.token, role: response.role });
 
       // ✅ Redirect based on role
-      if (response.role === "ADMIN") {
-        router.push("/admin");
-      } else if (response.role === "WAITER") {
-        router.push("/waiter");
-      } else {
-        router.push("/");
-      }
+      router.push(response.role === "ADMIN" ? "/admin" : "/waiter");
     } catch (err: any) {
       setError(err.response?.data?.message || "Login failed. Please try again.");
     } finally {
@@ -66,24 +62,22 @@ export const useAuth = () => {
     }
   };
 
-  // ✅ Logout function
+  // ✅ Logout function (Triggers a re-render)
   const logout = async () => {
     try {
       await logoutService();
     } catch (error) {
       console.error("Logout failed:", error);
     } finally {
-      // ✅ Clear cookies
+      // ✅ Clear cookies and trigger re-render
       destroyCookie(null, "api_token", { path: "/" });
       destroyCookie(null, "role", { path: "/" });
 
-      // ✅ Clear auth state
       setAuth({ token: null, role: null });
 
-      // ✅ Redirect to login page
       router.push("/login");
     }
   };
 
-  return { auth, login, logout, loading, error };
+  return { auth, login, logout, loading, error, isAuthenticated };
 };
